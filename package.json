@@ -19,7 +19,7 @@
   "dependencies": {
     "fs-extra": "^6.0.1",
     "mkdirp": "^0.5.1",
-    "sleep": "^5.1.1",
+    "system-sleep": "^1.3.6",
     "wdio-allure-reporter": "^0.6.2"
   },
   "devDependencies": {}
