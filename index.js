@@ -1,7 +1,7 @@
 const mkdirp = require('mkdirp');
 const fs = require('fs-extra');
 const path = require('path');
-const exec = require('child_process').exec;
+const spawn = require('child_process').spawn;
 
 const config = require('./lib/config.js');
 const allure = require('./lib/allure.js');
@@ -54,7 +54,11 @@ const recorder = {
     const outPath = path.resolve(outputDir, browser.globals.videoFilename);
 
     if (config.saveAllVideos || !test.passed) {
-      exec(`ffmpeg -r 10 -i ${dirPath}/%04d.png -vcodec libx264 -crf 32 -vf fps=10 -pix_fmt yuv420p ${outPath}.mp4`);
+      spawn(`ffmpeg -r 10 -i ${dirPath}/%04d.png -vcodec libx264 -crf 32 -vf fps=10 -pix_fmt yuv420p ${outPath}.mp4`, {
+        // stdio: 'inherit',
+        stdio: 'ignore',
+        shell: true,
+      });
       //exec(`ffmpeg -r 10 -i ${dirPath}/%04d.png -vcodec libx264 -crf 24 -vf fps=10 -pix_fmt yuv420p -vf scale="1200:trunc(ow/a/2)*2" ${outPath}.mp4`);
     }
   },
