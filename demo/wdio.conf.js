@@ -3,6 +3,7 @@ const videoRecorder = require('../index.js');
 const rec = videoRecorder.getHooks({
   usingAllure: true,     // Update Allurereport with videos
   saveAllVideos: false,  // If true, also saves videos for successful test cases
+  removeSteps: true,     // Remove all steps, and only save video
 });
 
 const config = {
