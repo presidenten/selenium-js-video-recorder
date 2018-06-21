@@ -77,9 +77,10 @@ const recorder = {
 
 
 module.exports = {
-  getHooks({ usingAllure=true, saveAllVideos=false }) {
+  getHooks({ usingAllure=true, saveAllVideos=false, removeSteps=false }) {
     config.usingAllure = usingAllure;
     config.saveAllVideos = saveAllVideos;
+    config.removeSteps = removeSteps;
 
     return recorder;
   },
