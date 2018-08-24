@@ -1,6 +1,6 @@
 {
   "name": "selenium-js-video-recorder",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Node library to manually control the selenoid video recorder",
   "main": "index.js",
   "scripts": {
