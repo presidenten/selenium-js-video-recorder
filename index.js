@@ -51,15 +51,14 @@ const recorder = {
     }
     const dirname = browser.globals.videoFilename;
     const dirPath = path.resolve(outputDir, config.rawPath, dirname);
-    const outPath = path.resolve(outputDir, browser.globals.videoFilename);
+    const outPath = path.resolve(outputDir);
 
     if (config.saveAllVideos || !test.passed) {
-      spawn(`ffmpeg -r 10 -i ${dirPath}/%04d.png -vcodec libx264 -crf 32 -vf fps=10 -pix_fmt yuv420p ${outPath}.mp4`, {
-        // stdio: 'inherit',
+      const command = `docker container run --rm -d -v ${dirPath}:/in -v ${outPath}:/out -e VIDEONAME=${browser.globals.videoFilename} presidenten/ffmpeg-pngs-to-mp4:1.0.0-ffmpeg4.0`;
+      spawn(command, {
         stdio: 'ignore',
         shell: true,
       });
-      //exec(`ffmpeg -r 10 -i ${dirPath}/%04d.png -vcodec libx264 -crf 24 -vf fps=10 -pix_fmt yuv420p -vf scale="1200:trunc(ow/a/2)*2" ${outPath}.mp4`);
     }
   },
 
