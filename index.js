@@ -41,7 +41,9 @@ const recorder = {
     const dirPath = path.resolve(outputDir, config.rawPath, dirname);
     const filename = browser.globals.currentFrameNr.toString().padStart(4, '0') + '.png';
     const filePath = path.resolve(dirPath, filename);
-    browser.saveScreenshot(filePath);
+    try {
+      browser.saveScreenshot(filePath);
+     } catch (e) {}
     browser.globals.currentFrameNr++;
   },
 

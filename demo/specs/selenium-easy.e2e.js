@@ -71,3 +71,19 @@ describe('User interactions', () => {
   });
 
 });
+
+
+describe('Library bug fixes (these should pass)', () => {
+  beforeEach(() => {
+    browser.url('http://www.seleniumeasy.com/test/');
+  });
+
+  it('should handle modals blocking screenshots', () => {
+    browser.url('https://www.seleniumeasy.com/test/javascript-alert-box-demo.html');
+
+    browser.click('button.btn.btn-default');
+    browser.alertAccept();
+    browser.click('button.btn.btn-default.btn-lg');
+    browser.alertAccept();
+   });
+});
