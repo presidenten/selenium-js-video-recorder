@@ -2,75 +2,57 @@
 describe('User interactions', () => {
   beforeEach(() => {
     browser.url('http://www.seleniumeasy.com/test/');
+    $('body #btn_basic_example').click();
   });
-
+  
   it('should be able edit input', () => {
-    browser.click('body #btn_basic_example');
+    $('.list-group .list-group-item').click();
 
-    browser.waitForExist('.list-group .list-group-item');
-    browser.pause(300);
-    browser.click('.list-group .list-group-item');
+    $('body #get-input input').setValue('Presidenten');
+    $('body #get-input button').click();
 
-    browser.waitForExist('body #get-input');
-    browser.setValue('body #get-input input', 'Presidenten');
-    browser.click('body #get-input button');
-
-    let name = $('body #user-message #display').getText();
-
+    const name = $('body #user-message #display').getText();
+    
+    $('body #user-message #display').scrollIntoView();
     expect(name).toBe('Presidenten');
   });
 
 
-  it('should be able to move slider', () => {
-    browser.click('body #btn_basic_example');
+  it('should be able to move slider (fails by design to make video)', () => {
+    $('body #advanced_example').click();
+    $('.list-group-item[href^="./drag-drop-range"]').click();
 
-    browser.waitForExist('.list-group .list-group-item');
-    browser.pause(300);
-    browser.click('body #advanced_example');
-    browser.waitForExist('.list-group .list-group-item');
-    browser.pause(300);
+    $('body #slider1 input').moveTo(10, 10);
+    browser.positionClick();
+    $('body #slider1 input').moveTo(100, 10);
+    browser.positionClick();
 
-    browser.click('.list-group-item[href^="./drag-drop-range"]');
-
-    browser.waitForExist('body #slider1');
-    browser.pause(300);
-
-    const sliderPos = browser.getLocation('body #slider1 input');
-
-    browser.leftClick('body #slider1 input', 10, 10);
-    browser.leftClick('body #slider1 input', 100, 10);
-
-    let range = $('body #slider1 #range').getText();
+    const range = $('body #slider1 #range').getText();
     expect(range).toBe(30);
   });
 
 
-  it('should be able to multi-select in dropdown', () => {
-    browser.click('body #btn_basic_example');
-
-    browser.waitForExist('.list-group .list-group-item');
-    browser.pause(300);
-    browser.click('.list-group-item[href^="./basic-select-dropdown"]');
-
-    browser.waitForExist('body #multi-select');
-    browser.pause(300);
+  it('should be able to multi-select in dropdown (fails by design to make video)', () => {
+    $('.list-group-item[href^="./basic-select-dropdown"]').click();
 
     const modifierKey = process.platform == 'darwin' ? 'Meta' : 'Control';
     browser.keys(modifierKey);
-    browser.click('body #multi-select option[value="Florida"]');
-    browser.click('body #multi-select option[value="Ohio"]');
-    browser.click('body #multi-select option[value="Texas"]');
+    $('body #multi-select option[value="Florida"]').click();
+    $('body #multi-select option[value="Ohio"]').click();
+    $('body #multi-select option[value="Texas"]').click();
 
-    browser.click('body #printAll');
+    $('body #printAll').click();
 
+    $('body #printAll').scrollIntoView();
     const values = $('.getall-selected').getText();
 
     expect(values.includes('Florida')).toBe(true);
     expect(values.includes('Ohio')).toBe(true);
     expect(values.includes('Texas')).toBe(true);
   });
-
 });
+
+
 
 
 describe('Library bug fixes (these should pass)', () => {
@@ -81,9 +63,9 @@ describe('Library bug fixes (these should pass)', () => {
   it('should handle modals blocking screenshots', () => {
     browser.url('https://www.seleniumeasy.com/test/javascript-alert-box-demo.html');
 
-    browser.click('button.btn.btn-default');
-    browser.alertAccept();
-    browser.click('button.btn.btn-default.btn-lg');
-    browser.alertAccept();
+    $('button.btn.btn-default').click();
+    browser.acceptAlert();
+    $('button.btn.btn-default.btn-lg').click();
+    browser.acceptAlert();
    });
 });

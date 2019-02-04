@@ -1,66 +1,76 @@
 const videoRecorder = require('../index.js');
+require('@babel/register')({
+  presets: [[
+    '@babel/preset-env',
+    { targets: { node: 10 } },
+  ]],
+  babelrc: false,
+});
 
 const rec = videoRecorder.getHooks({
   usingAllure: true,     // Update Allurereport with videos
   saveAllVideos: false,  // If true, also saves videos for successful test cases
-  removeSteps: true,     // Remove all steps, and only save video
 });
 
 const config = {
+  // Setup the browser window
   before: function (capabilities, specs) {
-    // Setup the browser window
-    browser.windowHandlePosition({x: 0, y: 0});
-    browser.windowHandleSize({width: 1320, height: 768});
+    browser.setWindowPosition(0, 0);
+    browser.setWindowSize(1320, 768);
   },
   // =============================
   // Hooks bound to video recorder
   // =============================
   beforeTest: function (test) {
-    rec.beforeTest(browser, test, config.outputDir);
+    rec.beforeTest(browser, test, config);
   },
   afterCommand: function (commandName, args, result, error) {
-    rec.afterCommand(browser, config.outputDir);
+    rec.afterCommand(browser, commandName, args, config);
   },
   afterTest: function (test) {
-    rec.afterTest(browser, test, config.outputDir);
+    rec.afterTest(browser, test, config);
   },
   onComplete: function(exitCode, config, capabilities) {
     rec.onComplete(config);
   },
 
-  // ============
-  // Capabilities
-  // ============
-  capabilities: [{
-      maxInstances: 1,
-      browserName: 'chrome',
-  }],
-
-
   // ===============
   // Custom settings
   // ===============
-  // host: 'localhost',                         // Selenium host url (uncomment for use with Selenoid)
-  services: ['selenium-standalone'],            // Run selenium through service (comment for use with Selenoid)
-  specs: [
-    './specs/**/*.e2e.js',
+  outputDir: './e2e/results/',
+  reporters: [
+    'concise',
+    ['allure', {
+      outputDir: './e2e/results/allure-raw/',
+      disableWebdriverStepsReporting: true,
+      disableWebdriverScreenshotsReporting: true,  // Must be set to true   
+    }],
   ],
-  outputDir: './e2e/results/',                  // Output dir for the report
-  reporters: ['dot', 'allure'],
-  reporterOptions: {
-    allure: {
-      outputDir: './e2e/results/allure-raw/',   // Output dir for raw report
-    },
-  },
-
-
+  
+  
+  
+  // ============
+  // Capabilities
+  // ============
+  services: ['selenium-standalone'],
+  capabilities: [{
+    maxInstances: 1,
+    browserName: 'chrome',
+  }],
+  
+  
+  
+  
   // ==================
   // Some nice defaults
   // ==================
-  deprecationWarnings: false,
+  specs: [
+    './specs/**/*.e2e.js',
+  ],
+  deprecationWarnings: true,
   maxInstances: 10,
   sync: true,
-  logLevel: 'silent',
+  logLevel: 'info',
   coloredLogs: true,
   bail: 0,
   waitforTimeout: 10000,
@@ -77,8 +87,4 @@ const config = {
 module.exports = {
   config,
 };
-
-require("babel-core/register")({
-  presets: ['es2015']
-});
 

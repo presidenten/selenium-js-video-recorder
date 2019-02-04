@@ -21,4 +21,5 @@ Cons:
   (The library cleans allure reports by default)
 
 
-Checkout the demo `wdio.conf.js` to see how the hooks are set up.
+Be sure to take a look at `demo/wdio.conf.js` to see how to get started.
+
