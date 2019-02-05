@@ -25,7 +25,7 @@ const recorder = {
    */
   afterCommand(browser, commandName, args, wdioConfig) {
     // Filter out non-action commands and keep only last action command
-    if (!config.jsonWireActions.includes(commandName) || args.length > 0) {
+    if (!config.VIPjsonWireActions.includes(commandName) && (!config.jsonWireActions.includes(commandName) || args.length > 0)) {
       return;
     }
     const dirname = browser.globals.videoFilename;
@@ -53,7 +53,7 @@ const recorder = {
     const outPath = path.resolve(wdioConfig.outputDir);
 
     if (config.saveAllVideos || !test.passed) {
-      const command = `docker container run --rm -d -v ${dirPath}:/in -v ${outPath}:/out -e VIDEONAME=${browser.globals.videoFilename} presidenten/ffmpeg-pngs-to-mp4:1.0.0-ffmpeg4.0`;
+      const command = `docker container run --rm -d -v ${dirPath}:/in -v ${outPath}:/out -e VIDEONAME=${browser.globals.videoFilename} -e SLOWDOWN=${config.videoSlowdownMultiplier} presidenten/ffmpeg-pngs-to-mp4:1.1.0-ffmpeg4.0`;
       spawn(command, {
         stdio: 'ignore',
         shell: true,
@@ -76,10 +76,19 @@ const recorder = {
 
 
 module.exports = {
-  getHooks({ usingAllure = true, saveAllVideos = false, saveRaw = false, moreJsonWireActions = [] }) {
+  getHooks({
+    usingAllure = config.usingAllure,
+    saveAllVideos = config.saveAllVideos,
+    saveRaw = config.saveRaw,
+    videoSlowdownMultiplier = config.videoSlowdownMultiplier,
+    moreVIPjsonWireActions = config.VIPjsonWireActions,
+    moreJsonWireActions = config.jsonWireActions,
+  }) {
     config.usingAllure = usingAllure;
     config.saveAllVideos = saveAllVideos;
     config.saveRaw = saveRaw;
+    config.videoSlowdownMultiplier = videoSlowdownMultiplier;
+    config.VIPjsonWireActions.push(...moreVIPjsonWireActions);
     config.jsonWireActions.push(...moreJsonWireActions);
 
     return recorder;
