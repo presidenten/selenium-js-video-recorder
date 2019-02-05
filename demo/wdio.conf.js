@@ -8,7 +8,6 @@ require('@babel/register')({
 });
 
 const rec = videoRecorder.getHooks({
-  usingAllure: true,     // Update Allurereport with videos
   saveAllVideos: false,  // If true, also saves videos for successful test cases
 });
 
