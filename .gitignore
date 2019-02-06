@@ -46,6 +46,4 @@ build
 dist
 node_modules
 coverage
-/vendor
-syncinfo.cfg
-demo/e2e
+e2e
