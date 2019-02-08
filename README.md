@@ -1,3 +1,13 @@
+
+DEPRECATED
+==========
+
+Please use https://github.com/presidenten/wdio-video-reporter
+
+Easier to use and solves a few issues.
+
+
+
 Selenium-js-video-recorder
 ==========================
 
